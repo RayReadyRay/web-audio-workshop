@@ -1,1 +1,1 @@
-# web-audio-workshop
+# Web Audio Workshop Materials
