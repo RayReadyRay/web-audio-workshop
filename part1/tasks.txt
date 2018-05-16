@@ -1,7 +1,6 @@
 Web server root should be web-audio
 
 
-
 1-oscillator
 
 Change oscillator type 
@@ -9,7 +8,6 @@ Change oscillator type
 Adjust frequency, detune
 
 Try setValueAtTime, linearRampToValueAtTime, exponentialRampToValueAtTime
-
 
 
 2-gain
@@ -26,8 +24,8 @@ Experiment with different root notes, minor/major scales and keyboardKeyCount
 
 
 4-portamento
-Use 
-linearRampToValueAtTime and slideTime for a portamento effect
+
+Use linearRampToValueAtTime and slideTime for a portamento effect
 
 
 
