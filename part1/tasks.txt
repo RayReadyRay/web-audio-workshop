@@ -1,4 +1,4 @@
-Web server root should be web-audio
+Web server root should be web-audio-workshop
 
 
 1-oscillator
