@@ -127,7 +127,8 @@ class MusicalScale{
     this.rootStepIndex = this.stepIndexByNote[ this.rootNote ] || 57;
 
   }
-  
+
+  //gets cents from index of note in scale 0=root
   getCents( value ) {
 
     let scaleInterval = value % 7;
@@ -148,6 +149,7 @@ class MusicalScale{
 
   }
 
+  //gets frequency from index of note in scale 0=root
   getFrequency( value ) {
 
     let scaleInterval = value % 7;
@@ -165,6 +167,15 @@ class MusicalScale{
     }
 
     let f = this.frequencies[ this.rootStepIndex + offset + ( 12 * octave ) ]
+    console.log(f)
+    return f;
+
+  }
+
+
+  getFrequencyByNote( value ) {
+
+    let f = this.frequencies[ this.stepIndexByNote[ value ] ];
     console.log(f)
     return f;
 
