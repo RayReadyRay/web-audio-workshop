@@ -53,9 +53,9 @@ class AudioBufferPlayer {
 
   stop( bufferSource ) {
 
-    if ( this.bufferSourceMap.get( bufferSource ) {
+    if ( this.bufferSourceMap.get( bufferSource ) ) {
 
-      if ( ( this.audioContext.currentTime - bufferSource.startTime ) > 0.01 ) ){ 
+      if ( ( this.audioContext.currentTime - bufferSource.startTime ) > 0.01 ) { 
       
         bufferSource.stop( this.audioContext.currentTime );
       

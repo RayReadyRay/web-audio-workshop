@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<meta charset="UTF-8"> 
+<html>
+  <head>
+    <title>Web Audio</title>
+
+    <style>
+
+      body{
+        padding: 0px;
+        margin: 0px;
+        overflow: hidden;
+      }
+
+      canvas{
+        position: absolute;
+      }
+
+      #audio-controls{
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        z-index: 100;
+      }
+
+    </style>
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.9/p5.min.js"></script>
+
+    <script src="/js/audio-modules/ADSREnvelope.js"></script>
+    <script src="/js/audio-modules/Analyser.js"></script>
+    <script src="/js/audio-modules/Delay.js"></script>
+    <script src="/js/audio-modules/LFO.js"></script>
+    <script src="/js/audio-modules/MusicalScale.js"></script>
+    <script src="/js/audio-modules/Reverb.js"></script>
+
+    <script src="/js/utils/AudioBufferLoader.js"></script>
+    <script src="/js/utils/XHR.js"></script>
+
+
+    <script src="sketch.js"></script>
+
+  </head>
+
+  <body>
+
+  <div id="audio-controls">
+    <select id="osc-waveform">
+      <option value="sine">sine</option>
+      <option value="square">square</option>
+      <option value="sawtooth">sawtooth</option>
+      <option value="triangle">triangle</option>
+    </select>
+    <select id="lfo-waveform">
+      <option value="sine">sine</option>
+      <option value="square">square</option>
+      <option value="sawtooth">sawtooth</option>
+      <option value="triangle">triangle</option>
+    </select>
+  </div>
+
+  </body>
+</html>

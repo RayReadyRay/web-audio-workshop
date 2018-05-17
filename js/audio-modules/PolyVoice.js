@@ -20,31 +20,35 @@ class PolyVoice {
     //create the voices
     for ( let i=0; i<this.voiceCount; i++ ) {
 
-      let voice = new VoiceClass( { this.audioContext } );
+      let voice = new VoiceClass( { audioContext: this.audioContext } );
       voice.output.connect( this.output );
 
       this.voiceMap.set( i, voice );
 
     }
 
+    this.currentVoice = this.voiceMap.get(0);
+
   }
 
-  startVoice( value ){
+  start( time = this.audioContext.currentTime ){
 
     //cycle through the voices
     this.currentVoiceId = ( this.currentVoiceId + 1 ) % this.voiceCount;
     
-    this.voiceMap.get( this.currentVoiceId ).start( value );
+    this.currentVoice = this.voiceMap.get( this.currentVoiceId );
 
-    return currentVoice;
+    this.currentVoice.start( time );
+
+    return this.currentVoiceId;
 
   }
 
-  stopVoice( voiceId ){
+  stop( time = this.audioContext.currentTime, voiceId ){
 
     let vId = voiceId || this.currentVoice
 
-    voiceMap.get( currentVoice ).stop();
+    voiceMap.get( currentVoice ).stop( time );
 
   }
 
