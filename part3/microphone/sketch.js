@@ -31,7 +31,7 @@ submixGain.connect( delay.input );
 delay.output.connect( effectGain );
 
 const lfo = new LFO( { audioContext } );
-lfo.connect( delay.input.delayTime, 4 );
+// lfo.connect( delay.input.delayTime, 4 );
 lfo.oscillator.frequency = .00125;
 lfo.start();
 
@@ -120,7 +120,7 @@ function draw() {
 
 		strokeWeight( 3 * ( i / dataArray.length ) )
 
-		amp = ( dataArray[ i - 1 ] / 256 );
+		amp = ( dataArray[ i - 1 ] / 255 );
 
 		stroke( 1.5 * ( 255 - (255 * amp ) ) );
 
@@ -131,7 +131,7 @@ function draw() {
 
 		currentSpin += .0125 * pointSpacingAngle;
 
-		amp = ( dataArray[ i ] / 256 );
+		amp = ( dataArray[ i ] / 255 );
 
 		r = radius + ( radius * Math.pow( amp * 2, 2 ) );
 

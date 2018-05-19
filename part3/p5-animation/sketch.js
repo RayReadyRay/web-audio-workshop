@@ -63,6 +63,7 @@ function setup() {
 	document.body.addEventListener( "click", clickHandler );
 
 	document.body.addEventListener( "touchend", clickHandler);
+	document.body.addEventListener( "touchstart", clickHandler);
 
 	//create p5 canvas
 	createCanvas( windowWidth, windowHeight );
@@ -230,7 +231,8 @@ function draw() {
 
 	//draw waveform
   stroke( 255, 0, 0 );
-	strokeWeight( 1 );
+	strokeWeight( 3 );
+
 
 	currentVoices.forEach( ( voice, id ) => {
 
@@ -252,7 +254,7 @@ function draw() {
 
 		for( var i = 1; i < dataArray.length; i++ ) {
 
-			amp = ( dataArray[ i - 1 ] / 256 );
+			amp = ( dataArray[ i - 1 ] / 255 );
 
   		stroke( 255 * amp );
 
@@ -263,9 +265,9 @@ function draw() {
 
 			currentSpin += pointSpacingAngle;
 
-			amp = ( dataArray[ i ] / 256 );
+			amp = ( dataArray[ i ] / 255 );
 
-			r = radius + ( radius * (amp * amp) );
+			r = radius + ( radius * Math.pow(amp,2) );
 
 			let x2 = tX + r * Math.cos(currentSpin);
 			let y2 = tY + r * Math.sin(currentSpin);

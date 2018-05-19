@@ -8,12 +8,12 @@ class Voice {
     this.output.gain.setValueAtTime( 0, this.audioContext.currentTime );
 
     //setup analyser
-    this.analyser = new Analyser( { audioContext, fftSize: 512 } );
+    this.analyser = new Analyser( { audioContext, fftSize: 32 } );
     this.output.connect( this.analyser.input );
 
     //setup oscillator
     this.oscillator = audioContext.createOscillator();
-    this.oscillator.type = "sawtooth";
+    this.oscillator.type = "sine";
     this.oscillator.start();
 
     //setup ADSR
