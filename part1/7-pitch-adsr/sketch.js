@@ -25,7 +25,9 @@ envelope.connect( masterGain.gain );
 
 //setup pitch ADSR
 const pitchEnvelope = new ADSREnvelope( { audioContext } );
-pitchEnvelope.connect( oscillator.detune, 0 );
+pitchEnvelope.attack = .5;
+pitchEnvelope.release = 1;
+pitchEnvelope.connect( oscillator.detune, -2400 );
 
 //setup musical scale and keyboard
 const musicalScale = new MusicalScale({ scale: "major", rootNote: "C4" });

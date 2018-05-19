@@ -7,49 +7,37 @@ class Voice {
     this.output = this.audioContext.createGain();
     this.output.gain.setValueAtTime( 0, this.audioContext.currentTime );
 
+    //setup analyser
+    this.analyser = new Analyser( { audioContext, fftSize: 512 } );
+    this.output.connect( this.analyser.input );
+
     //setup oscillator
     this.oscillator = audioContext.createOscillator();
+    this.oscillator.type = "sawtooth";
     this.oscillator.start();
 
     //setup ADSR
     this.envelope = new ADSREnvelope( { audioContext } );
-    this.envelope.attack = 0;
+    this.envelope.attack = 1;
     this.envelope.decay = 1;
-    this.envelope.sustain = 1;
-    this.envelope.release = .5;
+    this.envelope.sustain = .1;
+    this.envelope.release = .25;
     this.envelope.connect( this.output.gain );
 
     //setup filter
     this.filter = this.audioContext.createBiquadFilter();
     this.filter.type = "lowpass";
-    // this.filter.Q.setValueAtTime( 30, this.audioContext.currentTime );
-    // this.filter.frequency.setValueAtTime( 20000, this.audioContext.currentTime );
+    this.filter.Q.setValueAtTime( 30, this.audioContext.currentTime );
+    this.filter.frequency.setValueAtTime( 20000, this.audioContext.currentTime );
     this.filter.connect( this.output );
 
-    // this.oscillator.connect( this.filter );
+    this.oscillator.connect( this.output );
 
     //setup filter LFO
     this.lfo = new LFO( { audioContext: this.audioContext } );
     this.lfo.connect( this.filter.detune, -4800 );
+    this.lfo.connect( this.oscillator.detune, 2400 );
     this.lfo.start();
-    this.lfo.depth.gain.setValueAtTime( 0, this.audioContext.currentTime );
-
-
-    this.envelope.connect( this.lfo.depth.gain );
-
-    //listen for oscillator waveform selection
-    const oscWaveformElement = document.querySelector( "#osc-waveform" );
-    oscWaveformElement.addEventListener( "change", ( event ) => {
-      event.preventDefault();
-      this.oscillator.type = event.target.value;
-    });
-
-    //listen for low frequency oscillator waveform selection
-    const lfoWaveformElement = document.querySelector( "#lfo-waveform" );
-    lfoWaveformElement.addEventListener( "change", ( event ) => {
-      event.preventDefault();
-      this.lfo.oscillator.type = event.target.value;
-    });
 
     this.buffers = null;
 
@@ -63,7 +51,9 @@ class Voice {
     
     if( this.buffers ){
       let bufferSource = this.bufferPlayer.start( this.buffers.get( 0 ), Math.random() );
-      bufferSource.connect( this.output );
+      // bufferSource.connect( this.filter );
+      
+      this.lfo.connect( bufferSource.playbackRate );
     }
     
     this.envelope.start( time );

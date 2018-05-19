@@ -11,6 +11,12 @@ class Voice {
     this.oscillator = audioContext.createOscillator();
     this.oscillator.start();
 
+    //setup oscillator
+    this.oscillator2 = audioContext.createOscillator();
+    this.oscillator2.detune.setValueAtTime( -2400, 0 );
+    this.oscillator2.type = "square";
+    this.oscillator2.start();
+
     //setup ADSR
     this.envelope = new ADSREnvelope( { audioContext } );
     this.envelope.attack = 1;
@@ -27,13 +33,14 @@ class Voice {
     this.filter.connect( this.output );
 
     this.oscillator.connect( this.filter );
+    this.oscillator2.connect( this.output );
 
     //setup filter LFO
     this.lfo = new LFO( { audioContext: this.audioContext, frequency: .125 } );
     this.lfo.connect( this.filter.detune, -4800 );
     this.lfo.start();
     this.lfo.depth.gain.setValueAtTime( 0, this.audioContext.currentTime );
-
+    this.lfo.connect( this.oscillator.detune, 2400 );
     this.envelope.connect( this.lfo.depth.gain );
 
     //listen for oscillator waveform selection

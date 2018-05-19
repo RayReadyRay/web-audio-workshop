@@ -81,7 +81,7 @@ function updateKeyboardKeySlide() {
 	if( k !== currentKeyboardKey ) {
 		currentKeyboardKey = k;
 		oscillator.frequency.cancelScheduledValues( audioContext.currentTime );
-		oscillator.frequency.setValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime );
+		oscillator.frequency.linearRampToValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime + slideTime );
 	}
 
 }

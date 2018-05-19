@@ -6,11 +6,13 @@ const audioContext = new AudioContext();
 
 //setup oscillator
 const oscillator = audioContext.createOscillator();
-oscillator.type = "square";
-oscillator.frequency.value = "440";
-oscillator.detune.value = "-2400";//cents
+oscillator.type = "sine";
+oscillator.frequency.value = 440;
+oscillator.detune.value = -2400;//cents
 oscillator.start();
 oscillator.connect( audioContext.destination );
+
+oscillator.frequency.exponentialRampToValueAtTime(1760, audioContext.currentTime + 5)
 
 function setup() {
 

@@ -8,7 +8,6 @@ const audioContext = new AudioContext();
 const masterGain = audioContext.createGain();
 masterGain.connect( audioContext.destination );
 masterGain.gain.value = 0;
-
 //setup oscillator
 const oscillator = audioContext.createOscillator();
 oscillator.start();
@@ -37,9 +36,13 @@ function setup() {
 
 function mousePressed(){
 
+	masterGain.gain.setValueAtTime(1,audioContext.currentTime);
+
 }
 
 function mouseReleased() {
+
+	masterGain.gain.setValueAtTime(0,audioContext.currentTime);
 
 }
 

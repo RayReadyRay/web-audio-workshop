@@ -20,7 +20,10 @@ oscillator.connect( masterGain );
 
 //setup ADSR
 const envelope = new ADSREnvelope( { audioContext } );
-envelope.attack = 0;
+envelope.attack = .25;
+envelope.decay = .1;
+envelope.sustain = 1;
+envelope.release = 2;
 envelope.connect( masterGain.gain );
 
 //setup musical scale and keyboard

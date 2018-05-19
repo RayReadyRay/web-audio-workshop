@@ -10,7 +10,7 @@ masterGain.connect( audioContext.destination );
 masterGain.gain.value = 0;
 
 //setup analyser
-const analyser = new Analyser( { audioContext, fftSize: 2048 } );
+const analyser = new Analyser( { audioContext, fftSize: 32 } );
 masterGain.connect( analyser.input );
 
 //setup oscillator
@@ -114,11 +114,11 @@ function draw() {
 		
 		//start point of line segment
 		let x1 = ( i - 1 ) * sliceWidth;//time
-		let y1 = waveformHeight * ( dataArray[ i - 1 ] / 256 );//amplitude
+		let y1 = waveformHeight * ( dataArray[ i - 1 ] / 255 );//amplitude
 
 		//end point of line segment
 		let x2 = i * sliceWidth;//time
-		let y2 = waveformHeight * ( dataArray[ i ] / 256 );//amplitude
+		let y2 = waveformHeight * ( dataArray[ i ] / 255 );//amplitude
 
 		//offset Y to middle of window
 		y1 += ( .5 * windowHeight ) - ( .5 * waveformHeight );

@@ -66,7 +66,7 @@ function setup() {
 	polyVoice.output.connect( submixGain );
 	voice = polyVoice.currentVoice;
 
-	let sampleURLs = ["/audio/samples/wolves.mp3"];
+	let sampleURLs = ["/audio/samples/it-takes-two.mp3"];
 
 	AudioBufferLoader.load( sampleURLs, audioContext )
 	  .then( buffers => {

@@ -9,7 +9,6 @@ const masterGain = audioContext.createGain();
 masterGain.connect( audioContext.destination );
 masterGain.gain.value = .8;
 
-
 //setup bus and effects
 const compressor = audioContext.createDynamicsCompressor();
 // compressor.threshold.value = -30;
@@ -22,39 +21,36 @@ compressor.connect(masterGain);
 
 const submixGain = audioContext.createGain();
 submixGain.connect( compressor );
-submixGain.gain.value = 0;
 
 const effectGain = audioContext.createGain();
 effectGain.connect( compressor );
 
-const delay = new Delay( { audioContext, feedback: 1, time: .5 } );
+const delay = new Delay( { audioContext, feedback: .4, time: .5 } );
 submixGain.connect( delay.input );
 delay.output.connect( effectGain );
+
+const reverb = new Reverb( { audioContext, url: "/audio/impulses/default.wav" } );
+submixGain.connect( reverb.input );
+reverb.output.connect( effectGain );
+
+delay.output.connect( reverb.input );
 
 //setup analyser
 const analyser = new Analyser( { audioContext } );
 masterGain.connect( analyser.input );
 
-//setup oscillator
-const oscillator = audioContext.createOscillator();
-oscillator.start();
-oscillator.connect( submixGain );
-
-//setup ADSR
-const envelope = new ADSREnvelope( { audioContext } );
-envelope.attack = 0;
-envelope.decay = .5;
-envelope.sustain = 0.3;
-envelope.release = 1;
-envelope.connect( submixGain.gain );
-
-envelope.connect( delay.input.delayTime);
-
 //setup musical scale and keyboard
 const musicalScale = new MusicalScale({ scale: "minor", rootNote: "A4" });
-const keyboardKeyCount = 14;
+const keyboardKeyCount = 7;
 const slideTime = .5;
 let currentKeyboardKey = 0;
+
+let polyVoice;
+let voice;
+
+let currentVoices = new Map();
+let touchKeys = new Map();
+
 
 function setup() {
 
@@ -65,36 +61,38 @@ function setup() {
 	}
 	document.body.addEventListener( "click", clickHandler );
 
-	//listen for oscillator waveform selection
-	const oscWaveformElement = document.querySelector( "#osc-waveform" );
-	oscWaveformElement.addEventListener( "change", function( event ){
-		event.preventDefault();
-		oscillator.type = event.target.value;
-	});
-
-	//listen for low frequency oscillator waveform selection
-	const lfoWaveformElement = document.querySelector( "#lfo-waveform" );
-	lfoWaveformElement.addEventListener( "change", function( event ){
-		event.preventDefault();
-		lfo.oscillator.type = event.target.value;
-	});
-
 	//create p5 canvas
 	createCanvas( windowWidth, windowHeight );
+
+	polyVoice = new PolyVoice( { audioContext, VoiceClass: Voice } );
+	polyVoice.output.connect( submixGain );
+	voice = polyVoice.currentVoice;
+
+	// let sampleURLs = ["/audio/samples/wolves.mp3"];
+
+	// AudioBufferLoader.load( sampleURLs, audioContext )
+	//   .then( buffers => {
+	//     polyVoice.voiceMap.forEach( voice => {
+	//       voice.buffers = buffers;
+	//     })
+	//   });
+
 
 }
 
 function mousePressed(){
 
-	envelope.start();
-	
+	polyVoice.start();
+	voice = polyVoice.currentVoice;
+
 	updateKeyboardKey();
 
 }
 
 function mouseReleased() {
 
-	envelope.stop();
+	voice.stop();
+	voice = polyVoice.currentVoice;
 
 }
 
@@ -106,6 +104,93 @@ function mouseDragged() {
 
 function mouseMoved() {
 
+	touches.forEach( function( touch ) {
+
+			if( !currentVoices.has( touch.id ) ) {
+
+				polyVoice.start();
+				currentVoices.set( touch.id, polyVoice.currentVoice );
+
+			}
+
+	} );
+
+}
+
+function touchStarted() {
+
+	touches.forEach( function( touch ) {
+
+		if( !currentVoices.has( touch.id ) ) {
+
+			let voice = polyVoice.start();
+			currentVoices.set( touch.id, voice );
+
+			let k = Math.floor( ( touch.x / windowWidth ) * keyboardKeyCount );
+			touchKeys.set( touch.id, k );
+
+			voice.oscillator.type = "sawtooth";
+			voice.oscillator.frequency.cancelScheduledValues( audioContext.currentTime );
+			voice.oscillator.frequency.setValueAtTime( musicalScale.getFrequency( k ), audioContext.currentTime );
+
+		}
+
+	} );
+
+  // prevent default
+  return false;
+
+}
+
+function touchEnded() {
+
+	let touchIds = [];
+
+	touches.forEach( function( touch ) {
+
+		touchIds.push( touch.id );
+
+	} );
+
+	currentVoices.forEach( function( voice, id ) {
+
+		if(!touchIds.includes( id ) ) {
+
+			voice.stop( audioContext.currentTime );
+
+			currentVoices.delete( id );
+			touchKeys.delete( id );
+
+		}
+
+	} );
+
+  // prevent default
+  return false;
+
+}
+
+function touchMoved () {
+
+	touches.forEach( function( touch ) {
+
+		let k = Math.floor( ( touch.x / windowWidth ) * keyboardKeyCount );
+		
+		if( touchKeys.get( touch.id ) != k ) {
+
+			let voice = currentVoices.get( touch.id );
+			voice.oscillator.frequency.cancelScheduledValues( audioContext.currentTime );
+			voice.oscillator.frequency.linearRampToValueAtTime( musicalScale.getFrequency( k ), audioContext.currentTime + slideTime );
+
+			touchKeys.set( touch.id, k );
+
+		}
+
+	} );
+
+  // prevent default
+  return false;
+
 }
 
 function updateKeyboardKey() {
@@ -113,8 +198,8 @@ function updateKeyboardKey() {
 	let k = Math.floor( ( mouseX / windowWidth ) * keyboardKeyCount );
 
 	currentKeyboardKey = k;
-	oscillator.frequency.cancelScheduledValues( audioContext.currentTime );
-	oscillator.frequency.setValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime );
+	voice.oscillator.frequency.cancelScheduledValues( audioContext.currentTime );
+	voice.oscillator.frequency.setValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime );
 
 }
 
@@ -124,8 +209,8 @@ function updateKeyboardKeySlide() {
 
 	if( k !== currentKeyboardKey ) {
 		currentKeyboardKey = k;
-		oscillator.frequency.cancelScheduledValues( audioContext.currentTime );
-		oscillator.frequency.linearRampToValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime + slideTime );
+		voice.oscillator.frequency.cancelScheduledValues( audioContext.currentTime );
+		voice.oscillator.frequency.linearRampToValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime + slideTime );
 	}
 
 }

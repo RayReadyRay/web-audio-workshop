@@ -96,6 +96,7 @@ function updateKeyboardKey() {
 	currentKeyboardKey = k;
 	voice.oscillator.frequency.cancelScheduledValues( audioContext.currentTime );
 	voice.oscillator.frequency.setValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime );
+	voice.oscillator2.frequency.setValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime );
 
 }
 
@@ -106,7 +107,10 @@ function updateKeyboardKeySlide() {
 	if( k !== currentKeyboardKey ) {
 		currentKeyboardKey = k;
 		voice.oscillator.frequency.cancelScheduledValues( audioContext.currentTime );
+		voice.oscillator2.frequency.cancelScheduledValues( audioContext.currentTime );
 		voice.oscillator.frequency.linearRampToValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime + slideTime );
+		voice.oscillator2.frequency.linearRampToValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime + slideTime );
+	
 	}
 
 }

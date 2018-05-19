@@ -33,6 +33,8 @@ const lfo = new LFO( { audioContext } );
 lfo.oscillator.frequency.value = 1;
 lfo.connect( oscillator.detune, 1200 );
 
+lfo.connect( masterGain.gain, 1 );
+
 //setup musical scale and keyboard
 const musicalScale = new MusicalScale({ scale: "major", rootNote: "C4" });
 const keyboardKeyCount = 28;
