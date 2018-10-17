@@ -1,5 +1,5 @@
-//set AudioContext class for compatibility 
-let AudioContext = window.AudioContext || window.webkitAudioContext;  
+//set AudioContext class for compatibility
+let AudioContext = window.AudioContext || window.webkitAudioContext;
 
 //create audio context
 const audioContext = new AudioContext();
@@ -71,7 +71,7 @@ function mousePressed(){
 	lfo.start();
 	envelope.start();
 	pitchEnvelope.start();
-	
+
 	updateKeyboardKey();
 
 }
@@ -94,28 +94,31 @@ function mouseMoved() {
 }
 
 function updateKeyboardKey() {
-	
+
 	let k = Math.floor( ( mouseX / windowWidth ) * keyboardKeyCount );
 
 	currentKeyboardKey = k;
+		console.log(k)
 	oscillator.frequency.cancelScheduledValues( audioContext.currentTime );
-	oscillator.frequency.setValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime );
+	oscillator.frequency.linearRampToValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime + slideTime );
 
 	lfo.oscillator.frequency.setValueAtTime( currentKeyboardKey * 100, audioContext.currentTime );
 
 }
 
 function updateKeyboardKeySlide() {
-	
+
 	let k = Math.floor( ( mouseX / windowWidth ) * keyboardKeyCount );
 
 	if( k !== currentKeyboardKey ) {
+		console.log(k)
+
 		currentKeyboardKey = k;
 		oscillator.frequency.cancelScheduledValues( audioContext.currentTime );
 		oscillator.frequency.linearRampToValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime + slideTime );
-	
-		lfo.oscillator.frequency.linearRampToValueAtTime( currentKeyboardKey * 100, audioContext.currentTime  + slideTime );
-	
+
+		lfo.oscillator.frequency.setValueAtTime( currentKeyboardKey * 100, audioContext.currentTime  + slideTime );
+
 	}
 
 }
@@ -141,7 +144,7 @@ function draw() {
 	let waveformHeight = .333 * windowHeight;
 
 	for( var i = 1; i < dataArray.length; i++ ) {
-		
+
 		//start point of line segment
 		let x1 = ( i - 1 ) * sliceWidth;//time
 		let y1 = waveformHeight * ( dataArray[ i - 1 ] / 256 );//amplitude

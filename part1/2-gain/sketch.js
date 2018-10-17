@@ -1,5 +1,5 @@
-//set AudioContext class for compatibility 
-let AudioContext = window.AudioContext || window.webkitAudioContext;  
+//set AudioContext class for compatibility
+let AudioContext = window.AudioContext || window.webkitAudioContext;
 
 //create audio context
 const audioContext = new AudioContext();
@@ -36,13 +36,11 @@ function setup() {
 
 function mousePressed(){
 
-	masterGain.gain.setValueAtTime(1,audioContext.currentTime);
 
 }
 
 function mouseReleased() {
 
-	masterGain.gain.setValueAtTime(0,audioContext.currentTime);
 
 }
 

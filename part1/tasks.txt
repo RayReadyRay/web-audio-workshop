@@ -3,7 +3,7 @@ Web server root should be web-audio-workshop
 
 1-oscillator
 
-Change oscillator type 
+Change oscillator type
 
 Adjust frequency, detune
 
@@ -40,11 +40,12 @@ Observe how changing FFT size affects the waveform
 
 Adjust ADSR settings
 
-Connect envelope to oscillator.detune
 
 
 
 7-pitch-adsr
+
+Create pitch envelope
 
 Adjust ADSR settings
 

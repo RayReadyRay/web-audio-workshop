@@ -1,5 +1,5 @@
-//set AudioContext class for compatibility 
-let AudioContext = window.AudioContext || window.webkitAudioContext;  
+//set AudioContext class for compatibility
+let AudioContext = window.AudioContext || window.webkitAudioContext;
 
 //create audio context
 const audioContext = new AudioContext();
@@ -22,12 +22,6 @@ oscillator.connect( masterGain );
 const envelope = new ADSREnvelope( { audioContext } );
 envelope.attack = 0;
 envelope.connect( masterGain.gain );
-
-//setup pitch ADSR
-const pitchEnvelope = new ADSREnvelope( { audioContext } );
-pitchEnvelope.attack = .5;
-pitchEnvelope.release = 1;
-pitchEnvelope.connect( oscillator.detune, -2400 );
 
 //setup musical scale and keyboard
 const musicalScale = new MusicalScale({ scale: "major", rootNote: "C4" });
@@ -59,7 +53,6 @@ function setup() {
 function mousePressed(){
 
 	envelope.start();
-	pitchEnvelope.start();
 
 	updateKeyboardKey();
 
@@ -68,7 +61,6 @@ function mousePressed(){
 function mouseReleased() {
 
 	envelope.stop();
-	pitchEnvelope.stop();
 
 }
 
@@ -83,7 +75,7 @@ function mouseMoved() {
 }
 
 function updateKeyboardKey() {
-	
+
 	let k = Math.floor( ( mouseX / windowWidth ) * keyboardKeyCount );
 
 	currentKeyboardKey = k;
@@ -93,7 +85,7 @@ function updateKeyboardKey() {
 }
 
 function updateKeyboardKeySlide() {
-	
+
 	let k = Math.floor( ( mouseX / windowWidth ) * keyboardKeyCount );
 
 	if( k !== currentKeyboardKey ) {
@@ -125,7 +117,7 @@ function draw() {
 	let waveformHeight = .333 * windowHeight;
 
 	for( var i = 1; i < dataArray.length; i++ ) {
-		
+
 		//start point of line segment
 		let x1 = ( i - 1 ) * sliceWidth;//time
 		let y1 = waveformHeight * ( dataArray[ i - 1 ] / 256 );//amplitude
