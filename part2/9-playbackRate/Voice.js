@@ -1,5 +1,5 @@
 class Voice {
-  
+
   constructor( options ) {
 
     this.audioContext = options.audioContext;
@@ -20,17 +20,17 @@ class Voice {
     this.envelope.connect( this.output.gain );
 
     //setup filter
-    this.filter = this.audioContext.createBiquadFilter();
-    this.filter.type = "lowpass";
-    this.filter.Q.setValueAtTime( 30, this.audioContext.currentTime );
-    this.filter.frequency.setValueAtTime( 20000, this.audioContext.currentTime );
-    this.filter.connect( this.output );
+    // this.filter = this.audioContext.createBiquadFilter();
+    // this.filter.type = "lowpass";
+    // this.filter.Q.setValueAtTime( 30, this.audioContext.currentTime );
+    // this.filter.frequency.setValueAtTime( 20000, this.audioContext.currentTime );
+    // this.filter.connect( this.output );
 
     // this.oscillator.connect( this.filter );
 
     //setup filter LFO
-    this.lfo = new LFO( { audioContext: this.audioContext } );
-    this.lfo.connect( this.filter.detune, -4800 );
+    this.lfo = new LFO( { audioContext: this.audioContext, frequency: 4 } );
+    this.lfo.connect( this.output );
     this.lfo.start();
     this.lfo.depth.gain.setValueAtTime( 0, this.audioContext.currentTime );
 
@@ -49,6 +49,7 @@ class Voice {
     lfoWaveformElement.addEventListener( "change", ( event ) => {
       event.preventDefault();
       this.lfo.oscillator.type = event.target.value;
+      console.log( event.target.value );
     });
 
     this.buffers = null;
@@ -60,14 +61,14 @@ class Voice {
   }
 
   start( time = this.audioContext.currentTime ) {
-    
+
     if( this.buffers ){
       let bufferSource = this.bufferPlayer.start( this.buffers.get( 0 ), Math.random() );
-      bufferSource.connect( this.filter );
-      
+      bufferSource.connect( this.output );
+
       this.lfo.connect( bufferSource.playbackRate );
     }
-    
+
     this.envelope.start( time );
 
   }

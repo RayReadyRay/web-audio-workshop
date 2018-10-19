@@ -1,5 +1,5 @@
-//set AudioContext class for compatibility 
-let AudioContext = window.AudioContext || window.webkitAudioContext;  
+//set AudioContext class for compatibility
+let AudioContext = window.AudioContext || window.webkitAudioContext;
 
 //create audio context
 const audioContext = new AudioContext();
@@ -15,8 +15,8 @@ oscillator.start();
 oscillator.connect( masterGain );
 
 //setup musical scale and keyboard
-const musicalScale = new MusicalScale({ scale: "major", rootNote: "C4" });
-const keyboardKeyCount = 28;
+const musicalScale = new MusicalScale({ scale: "minor", rootNote: "C4" });
+const keyboardKeyCount = 7;
 let currentKeyboardKey = 0;
 
 function setup() {
@@ -62,7 +62,7 @@ function mouseMoved() {
 }
 
 function updateKeyboardKey() {
-	
+
 	let k = Math.floor( ( mouseX / windowWidth ) * keyboardKeyCount );
 
 	currentKeyboardKey = k;

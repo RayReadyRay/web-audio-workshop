@@ -1,5 +1,5 @@
-//set AudioContext class for compatibility 
-let AudioContext = window.AudioContext || window.webkitAudioContext;  
+//set AudioContext class for compatibility
+let AudioContext = window.AudioContext || window.webkitAudioContext;
 
 //create audio context
 const audioContext = new AudioContext();
@@ -31,7 +31,7 @@ const delay = new Delay( { audioContext, feedback: .4, time: .5 } );
 submixGain.connect( delay.input );
 delay.output.connect( effectGain );
 
-const reverb = new Reverb( { audioContext, url: "/audio/impulses/water.wav" } );
+const reverb = new Reverb( { audioContext, url: "/audio/impulses/space.wav" } );
 submixGain.connect( reverb.input );
 reverb.output.connect( effectGain );
 
@@ -92,7 +92,7 @@ function setup() {
 function mousePressed(){
 
 	envelope.start();
-	
+
 	updateKeyboardKey();
 
 }
@@ -114,7 +114,7 @@ function mouseMoved() {
 }
 
 function updateKeyboardKey() {
-	
+
 	let k = Math.floor( ( mouseX / windowWidth ) * keyboardKeyCount );
 
 	currentKeyboardKey = k;
@@ -124,7 +124,7 @@ function updateKeyboardKey() {
 }
 
 function updateKeyboardKeySlide() {
-	
+
 	let k = Math.floor( ( mouseX / windowWidth ) * keyboardKeyCount );
 
 	if( k !== currentKeyboardKey ) {
@@ -156,7 +156,7 @@ function draw() {
 	let waveformHeight = .333 * windowHeight;
 
 	for( var i = 1; i < dataArray.length; i++ ) {
-		
+
 		//start point of line segment
 		let x1 = ( i - 1 ) * sliceWidth;//time
 		let y1 = waveformHeight * ( dataArray[ i - 1 ] / 256 );//amplitude

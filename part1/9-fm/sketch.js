@@ -102,7 +102,7 @@ function updateKeyboardKey() {
 	oscillator.frequency.cancelScheduledValues( audioContext.currentTime );
 	oscillator.frequency.linearRampToValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime + slideTime );
 
-	lfo.oscillator.frequency.setValueAtTime( currentKeyboardKey * 100, audioContext.currentTime );
+	lfo.oscillator.frequency.setValueAtTime( 1000, audioContext.currentTime );
 
 }
 

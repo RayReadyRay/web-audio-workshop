@@ -15,9 +15,9 @@ oscillator.start();
 oscillator.connect( masterGain );
 
 //setup musical scale and keyboard
-const musicalScale = new MusicalScale({ scale: "major", rootNote: "C4" });
-const keyboardKeyCount = 28;
-const slideTime = .5;
+const musicalScale = new MusicalScale({ scale: "minor", rootNote: "C4" });
+const keyboardKeyCount = 14;
+const slideTime = .01;
 let currentKeyboardKey = 0;
 
 function setup() {
@@ -81,7 +81,7 @@ function updateKeyboardKeySlide() {
 	if( k !== currentKeyboardKey ) {
 		currentKeyboardKey = k;
 		oscillator.frequency.cancelScheduledValues( audioContext.currentTime );
-		oscillator.frequency.linearRampToValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime );
+		oscillator.frequency.linearRampToValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime + slideTime );
 	}
 
 }

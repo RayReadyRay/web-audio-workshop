@@ -6,9 +6,9 @@ const audioContext = new AudioContext();
 
 //setup oscillator
 const oscillator = audioContext.createOscillator();
-oscillator.type = "sine";
+oscillator.type = "triangle";
 oscillator.frequency.value = 440;
-oscillator.detune.value = -2400;//cents
+oscillator.detune.value = 1200;//cents
 oscillator.start();
 oscillator.connect( audioContext.destination );
 

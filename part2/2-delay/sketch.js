@@ -1,5 +1,5 @@
-//set AudioContext class for compatibility 
-let AudioContext = window.AudioContext || window.webkitAudioContext;  
+//set AudioContext class for compatibility
+let AudioContext = window.AudioContext || window.webkitAudioContext;
 
 //create audio context
 const audioContext = new AudioContext();
@@ -27,7 +27,7 @@ submixGain.gain.value = 0;
 const effectGain = audioContext.createGain();
 effectGain.connect( compressor );
 
-const delay = new Delay( { audioContext, feedback: 1, time: .5 } );
+const delay = new Delay( { audioContext, feedback: .5, time: .5 } );
 submixGain.connect( delay.input );
 delay.output.connect( effectGain );
 
@@ -48,7 +48,7 @@ envelope.sustain = 0.3;
 envelope.release = 1;
 envelope.connect( submixGain.gain );
 
-envelope.connect( delay.input.delayTime);
+// envelope.connect( delay.input.delayTime);
 
 //setup musical scale and keyboard
 const musicalScale = new MusicalScale({ scale: "minor", rootNote: "A4" });
@@ -87,7 +87,7 @@ function setup() {
 function mousePressed(){
 
 	envelope.start();
-	
+
 	updateKeyboardKey();
 
 }
@@ -109,7 +109,7 @@ function mouseMoved() {
 }
 
 function updateKeyboardKey() {
-	
+
 	let k = Math.floor( ( mouseX / windowWidth ) * keyboardKeyCount );
 
 	currentKeyboardKey = k;
@@ -119,7 +119,7 @@ function updateKeyboardKey() {
 }
 
 function updateKeyboardKeySlide() {
-	
+
 	let k = Math.floor( ( mouseX / windowWidth ) * keyboardKeyCount );
 
 	if( k !== currentKeyboardKey ) {
@@ -151,7 +151,7 @@ function draw() {
 	let waveformHeight = .333 * windowHeight;
 
 	for( var i = 1; i < dataArray.length; i++ ) {
-		
+
 		//start point of line segment
 		let x1 = ( i - 1 ) * sliceWidth;//time
 		let y1 = waveformHeight * ( dataArray[ i - 1 ] / 256 );//amplitude
