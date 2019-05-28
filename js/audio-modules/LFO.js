@@ -1,5 +1,5 @@
 class LFO {
-    
+
   constructor( options ) {
 
     this.audioContext = options.audioContext;
@@ -7,6 +7,8 @@ class LFO {
     this.oscillator = this.audioContext.createOscillator();
     this.oscillator.type = options.type || "sine";
     this.oscillator.frequency.value = options.frequency || 2;
+
+    this.rate = this.oscillator.frequency;
 
     this.depth = this.audioContext.createGain();
     this.oscillator.connect( this.depth );

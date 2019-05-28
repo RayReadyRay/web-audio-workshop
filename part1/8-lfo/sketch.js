@@ -20,8 +20,11 @@ oscillator.connect( masterGain );
 
 //setup ADSR
 const envelope = new ADSREnvelope( { audioContext } );
-envelope.attack = 1;
-// envelope.connect( masterGain.gain );
+envelope.attack = 2;
+envelope.decay = 2;
+envelope.sustain = .5;
+envelope.release = 2;
+envelope.connect( masterGain.gain );
 
 //setup pitch ADSR
 const pitchEnvelope = new ADSREnvelope( { audioContext } );
@@ -30,8 +33,7 @@ pitchEnvelope.connect( oscillator.detune, -1200 );
 
 //setup LFO
 const lfo = new LFO( { audioContext } );
-lfo.oscillator.frequency.value = .01;
-lfo.connect( oscillator.detune, 1200 );
+lfo.oscillator.frequency.value = 1;
 lfo.connect( masterGain.gain );
 
 //setup musical scale and keyboard
@@ -70,11 +72,11 @@ function setup() {
 
 function mousePressed(){
 
+	updateKeyboardKey();
+
 	lfo.start();
 	envelope.start();
 	pitchEnvelope.start();
-
-	updateKeyboardKey();
 
 }
 

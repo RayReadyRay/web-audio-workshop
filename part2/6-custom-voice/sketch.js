@@ -1,5 +1,5 @@
-//set AudioContext class for compatibility 
-let AudioContext = window.AudioContext || window.webkitAudioContext;  
+//set AudioContext class for compatibility
+let AudioContext = window.AudioContext || window.webkitAudioContext;
 
 //create audio context
 const audioContext = new AudioContext();
@@ -25,7 +25,7 @@ submixGain.connect( compressor );
 const effectGain = audioContext.createGain();
 effectGain.connect( compressor );
 
-const delay = new Delay( { audioContext, feedback: .4, time: .5 } );
+const delay = new Delay( { audioContext, feedback: .2, time: .15 } );
 submixGain.connect( delay.input );
 delay.output.connect( effectGain );
 
@@ -40,7 +40,7 @@ const analyser = new Analyser( { audioContext } );
 masterGain.connect( analyser.input );
 
 //setup musical scale and keyboard
-const musicalScale = new MusicalScale({ scale: "minor", rootNote: "A4" });
+const musicalScale = new MusicalScale({ scale: "minor", rootNote: "A2" });
 const keyboardKeyCount = 14;
 const slideTime = .5;
 let currentKeyboardKey = 0;
@@ -62,14 +62,14 @@ function setup() {
 
 	voice = new Voice( { audioContext } );
 	voice.output.connect( submixGain );
-	
+
 }
 
 function mousePressed(){
 
-	voice.start();
-	
 	updateKeyboardKey();
+
+	voice.start();
 
 }
 
@@ -90,7 +90,7 @@ function mouseMoved() {
 }
 
 function updateKeyboardKey() {
-	
+
 	let k = Math.floor( ( mouseX / windowWidth ) * keyboardKeyCount );
 
 	currentKeyboardKey = k;
@@ -101,7 +101,7 @@ function updateKeyboardKey() {
 }
 
 function updateKeyboardKeySlide() {
-	
+
 	let k = Math.floor( ( mouseX / windowWidth ) * keyboardKeyCount );
 
 	if( k !== currentKeyboardKey ) {
@@ -110,7 +110,7 @@ function updateKeyboardKeySlide() {
 		voice.oscillator2.frequency.cancelScheduledValues( audioContext.currentTime );
 		voice.oscillator.frequency.linearRampToValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime + slideTime );
 		voice.oscillator2.frequency.linearRampToValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime + slideTime );
-	
+
 	}
 
 }
@@ -136,7 +136,7 @@ function draw() {
 	let waveformHeight = .333 * windowHeight;
 
 	for( var i = 1; i < dataArray.length; i++ ) {
-		
+
 		//start point of line segment
 		let x1 = ( i - 1 ) * sliceWidth;//time
 		let y1 = waveformHeight * ( dataArray[ i - 1 ] / 256 );//amplitude

@@ -43,8 +43,9 @@ function setup() {
 
 function mousePressed(){
 
-	masterGain.gain.setValueAtTime( 1, audioContext.currentTime );
 	updateKeyboardKey();
+
+	masterGain.gain.setValueAtTime( 1, audioContext.currentTime );
 
 }
 

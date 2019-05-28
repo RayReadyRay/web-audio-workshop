@@ -20,20 +20,27 @@ oscillator.connect( masterGain );
 
 //setup ADSR
 const envelope = new ADSREnvelope( { audioContext } );
-envelope.attack = 1;
+envelope.attack = 2;
+envelope.decay = 2;
+envelope.sustain = .5;
+envelope.release = 2;
 envelope.connect( masterGain.gain );
 
 //setup pitch ADSR
 const pitchEnvelope = new ADSREnvelope( { audioContext } );
+envelope.attack = 2;
+envelope.decay = .5;
+envelope.sustain = 1;
+envelope.release = 2;
 pitchEnvelope.attack = 0.25;
-pitchEnvelope.connect( oscillator.detune, -1200 );
 
 //setup LFO
 const lfo = new LFO( { audioContext } );
 lfo.connect( oscillator.detune, 4800 );
+pitchEnvelope.connect( lfo.rate, -1200 );
 
 //setup musical scale and keyboard
-const musicalScale = new MusicalScale({ scale: "major", rootNote: "C4" });
+const musicalScale = new MusicalScale({ scale: "major", rootNote: "C2" });
 const keyboardKeyCount = 28;
 const slideTime = .5;
 let currentKeyboardKey = 0;
@@ -68,11 +75,11 @@ function setup() {
 
 function mousePressed(){
 
+	updateKeyboardKey();
+
 	lfo.start();
 	envelope.start();
 	pitchEnvelope.start();
-
-	updateKeyboardKey();
 
 }
 
@@ -102,7 +109,7 @@ function updateKeyboardKey() {
 	oscillator.frequency.cancelScheduledValues( audioContext.currentTime );
 	oscillator.frequency.linearRampToValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime + slideTime );
 
-	lfo.oscillator.frequency.setValueAtTime( 1000, audioContext.currentTime );
+	lfo.oscillator.frequency.setValueAtTime( currentKeyboardKey * 10, audioContext.currentTime );
 
 }
 
@@ -117,7 +124,7 @@ function updateKeyboardKeySlide() {
 		oscillator.frequency.cancelScheduledValues( audioContext.currentTime );
 		oscillator.frequency.linearRampToValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime + slideTime );
 
-		lfo.oscillator.frequency.setValueAtTime( currentKeyboardKey * 100, audioContext.currentTime  + slideTime );
+		lfo.oscillator.frequency.setValueAtTime( currentKeyboardKey * 10, audioContext.currentTime  + slideTime );
 
 	}
 

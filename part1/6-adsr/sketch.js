@@ -20,9 +20,9 @@ oscillator.connect( masterGain );
 
 //setup ADSR
 const envelope = new ADSREnvelope( { audioContext } );
-envelope.attack = 1;
-envelope.decay = .1;
-envelope.sustain = .15;
+envelope.attack = 2;
+envelope.decay = 2;
+envelope.sustain = .5;
 envelope.release = 2;
 envelope.connect( masterGain.gain );
 
@@ -55,9 +55,9 @@ function setup() {
 
 function mousePressed(){
 
-	envelope.start();
-
 	updateKeyboardKey();
+
+	envelope.start();
 
 }
 

@@ -36,13 +36,10 @@ function setup() {
 
 function mousePressed(){
 
-	masterGain.gain.value = 1;
-
 }
 
 function mouseReleased() {
 
-	masterGain.gain.value = 0;
 }
 
 function mouseDragged() {

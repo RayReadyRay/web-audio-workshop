@@ -1,5 +1,5 @@
-//set AudioContext class for compatibility 
-let AudioContext = window.AudioContext || window.webkitAudioContext;  
+//set AudioContext class for compatibility
+let AudioContext = window.AudioContext || window.webkitAudioContext;
 
 //create audio context
 const audioContext = new AudioContext();
@@ -20,17 +20,20 @@ oscillator.connect( masterGain );
 
 //setup ADSR
 const envelope = new ADSREnvelope( { audioContext } );
-envelope.attack = 1;
+envelope.attack = 2;
+envelope.decay = 2;
+envelope.sustain = .5;
+envelope.release = 2;
 envelope.connect( masterGain.gain );
 
 //setup pitch ADSR
 const pitchEnvelope = new ADSREnvelope( { audioContext } );
-pitchEnvelope.attack = 0.25;
-pitchEnvelope.connect( oscillator.detune, -1200 );
+pitchEnvelope.attack = 2;
+pitchEnvelope.connect( oscillator.detune, -200 );
 
 //setup LFO
 const lfo = new LFO( { audioContext } );
-lfo.connect( oscillator.detune, 4800 );
+lfo.connect( oscillator.detune, 1200 );
 
 envelope.connect( lfo.depth.gain );
 
@@ -70,11 +73,11 @@ function setup() {
 
 function mousePressed(){
 
+	updateKeyboardKey();
+
 	lfo.start();
 	envelope.start();
 	pitchEnvelope.start();
-	
-	updateKeyboardKey();
 
 }
 
@@ -96,28 +99,28 @@ function mouseMoved() {
 }
 
 function updateKeyboardKey() {
-	
+
 	let k = Math.floor( ( mouseX / windowWidth ) * keyboardKeyCount );
 
 	currentKeyboardKey = k;
 	oscillator.frequency.cancelScheduledValues( audioContext.currentTime );
 	oscillator.frequency.setValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime );
 
-	lfo.oscillator.frequency.setValueAtTime( currentKeyboardKey * 100, audioContext.currentTime );
+	lfo.oscillator.frequency.setValueAtTime( currentKeyboardKey * 10, audioContext.currentTime );
 
 }
 
 function updateKeyboardKeySlide() {
-	
+
 	let k = Math.floor( ( mouseX / windowWidth ) * keyboardKeyCount );
 
 	if( k !== currentKeyboardKey ) {
 		currentKeyboardKey = k;
 		oscillator.frequency.cancelScheduledValues( audioContext.currentTime );
 		oscillator.frequency.linearRampToValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime + slideTime );
-	
-		lfo.oscillator.frequency.linearRampToValueAtTime( currentKeyboardKey * 100, audioContext.currentTime  + slideTime );
-	
+
+		lfo.oscillator.frequency.linearRampToValueAtTime( currentKeyboardKey * 10, audioContext.currentTime  + slideTime );
+
 	}
 
 }
@@ -143,7 +146,7 @@ function draw() {
 	let waveformHeight = .333 * windowHeight;
 
 	for( var i = 1; i < dataArray.length; i++ ) {
-		
+
 		//start point of line segment
 		let x1 = ( i - 1 ) * sliceWidth;//time
 		let y1 = waveformHeight * ( dataArray[ i - 1 ] / 256 );//amplitude
@@ -161,4 +164,4 @@ function draw() {
 
 	}
 
-}f
+}

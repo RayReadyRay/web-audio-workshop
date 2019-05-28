@@ -1,5 +1,5 @@
 class Voice {
-  
+
   constructor( options ) {
 
     this.audioContext = options.audioContext;
@@ -28,16 +28,16 @@ class Voice {
     //setup filter
     this.filter = this.audioContext.createBiquadFilter();
     this.filter.type = "lowpass";
-    this.filter.Q.setValueAtTime( 30, this.audioContext.currentTime );
-    this.filter.frequency.setValueAtTime( 20000, this.audioContext.currentTime );
+    this.filter.Q.setValueAtTime( 20, this.audioContext.currentTime );
+    this.filter.frequency.setValueAtTime( 4800, this.audioContext.currentTime );
     this.filter.connect( this.output );
 
     this.oscillator.connect( this.filter );
-    this.oscillator2.connect( this.output );
+    this.oscillator2.connect( this.filter );
 
     //setup filter LFO
-    this.lfo = new LFO( { audioContext: this.audioContext, frequency: .125 } );
-    this.lfo.connect( this.filter.detune, -4800 );
+    this.lfo = new LFO( { audioContext: this.audioContext, frequency: 8 } );
+    this.lfo.connect( this.filter.frequency, -2400 );
     this.lfo.start();
     this.lfo.depth.gain.setValueAtTime( 0, this.audioContext.currentTime );
     this.lfo.connect( this.oscillator.detune, 2400 );

@@ -1,5 +1,5 @@
-//set AudioContext class for compatibility 
-let AudioContext = window.AudioContext || window.webkitAudioContext;  
+//set AudioContext class for compatibility
+let AudioContext = window.AudioContext || window.webkitAudioContext;
 
 //create audio context
 const audioContext = new AudioContext();
@@ -27,11 +27,11 @@ effectGain.connect( compressor );
 
 const delay = new Delay( { audioContext, feedback: .4, time: .5 } );
 submixGain.connect( delay.input );
-delay.output.connect( effectGain );
+// delay.output.connect( effectGain );
 
 const reverb = new Reverb( { audioContext, url: "/audio/impulses/default.wav" } );
 submixGain.connect( reverb.input );
-reverb.output.connect( effectGain );
+// reverb.output.connect( effectGain );
 
 delay.output.connect( reverb.input );
 
@@ -66,7 +66,7 @@ function setup() {
 	polyVoice.output.connect( submixGain );
 	voice = polyVoice.currentVoice;
 
-	let sampleURLs = ["/audio/samples/it-takes-two.mp3"];
+	let sampleURLs = ["/audio/samples/amen-break.wav"];
 
 	AudioBufferLoader.load( sampleURLs, audioContext )
 	  .then( buffers => {
@@ -80,10 +80,10 @@ function setup() {
 
 function mousePressed(){
 
-	polyVoice.start();
-	voice = polyVoice.currentVoice;
-
 	updateKeyboardKey();
+
+	polyVoice.start( currentKeyboardKey / keyboardKeyCount );
+	voice = polyVoice.currentVoice;
 
 }
 
@@ -104,24 +104,70 @@ function mouseMoved() {
 
 }
 
+function keyPressed() {
+
+	voice.stop();
+	voice = polyVoice.currentVoice;
+
+	let samplePosition = 0;
+  let keyIndex = -1;
+
+  switch(key){
+		case 'Q':
+			samplePosition = 1/10;
+			break;
+		case 'W':
+			samplePosition = 2/10;
+			break;
+		case 'E':
+			samplePosition = 3/10;
+			break;
+		case 'R':
+			samplePosition = 4/10;
+			break;
+		case 'T':
+			samplePosition = 5/10;
+			break;
+		case 'Y':
+			samplePosition = 6/10;
+			break;
+		case 'U':
+			samplePosition = 7/10;
+			break;
+		case 'I':
+			samplePosition = 8/10;
+			break;
+		case 'O':
+			samplePosition = 9/10;
+			break;
+		case 'P':
+			samplePosition = 9.5/10;
+			break;
+	}
+
+	polyVoice.start( samplePosition );
+	voice = polyVoice.currentVoice;
+
+}
+
+function keyReleased() {
+
+}
+
 function updateKeyboardKey() {
-	
+
 	let k = Math.floor( ( mouseX / windowWidth ) * keyboardKeyCount );
 
 	currentKeyboardKey = k;
-	voice.oscillator.frequency.cancelScheduledValues( audioContext.currentTime );
-	voice.oscillator.frequency.setValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime );
 
 }
 
 function updateKeyboardKeySlide() {
-	
+
 	let k = Math.floor( ( mouseX / windowWidth ) * keyboardKeyCount );
 
 	if( k !== currentKeyboardKey ) {
 		currentKeyboardKey = k;
-		voice.oscillator.frequency.cancelScheduledValues( audioContext.currentTime );
-		voice.oscillator.frequency.linearRampToValueAtTime( musicalScale.getFrequency( currentKeyboardKey ), audioContext.currentTime + slideTime );
 	}
 
 }
@@ -147,7 +193,7 @@ function draw() {
 	let waveformHeight = .333 * windowHeight;
 
 	for( var i = 1; i < dataArray.length; i++ ) {
-		
+
 		//start point of line segment
 		let x1 = ( i - 1 ) * sliceWidth;//time
 		let y1 = waveformHeight * ( dataArray[ i - 1 ] / 256 );//amplitude

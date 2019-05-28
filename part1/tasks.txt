@@ -59,12 +59,10 @@ Drop 2 octaves in .25 seconds
 
 Adjust LFO rate
 
-Connect LFO to masterGain.gain
+Connect envelope to LFO depth.gain
 
 
 
 9-fm
 
 Adjust FM multiplier
-
-Connect envelope to lfo.depth.gain

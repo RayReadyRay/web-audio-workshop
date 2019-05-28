@@ -22,7 +22,7 @@ class AudioBufferPlayer {
     bufferSource.onended = endHandler;
 
     if( loop ) {
-    
+
       loopEndTime = loopEndTime || buffer.duration;
 
       bufferSource.loopEnd = loopEndTime;
@@ -31,7 +31,7 @@ class AudioBufferPlayer {
 
       if ( duration !== 0 )
           bufferSource.stop( time + duration );
-    
+
     }
     else {
 
@@ -39,10 +39,10 @@ class AudioBufferPlayer {
 
     }
 
-    this.bufferSourceMap[ bufferSource ] = bufferSource;
+    this.bufferSourceMap.set( bufferSource, bufferSource );
 
     return bufferSource;
-    
+
   }
 
   createEndHandler( bufferSource ) {
@@ -55,14 +55,14 @@ class AudioBufferPlayer {
 
     if ( this.bufferSourceMap.get( bufferSource ) ) {
 
-      if ( ( this.audioContext.currentTime - bufferSource.startTime ) > 0.01 ) { 
-      
+      if ( ( this.audioContext.currentTime - bufferSource.startTime ) > 0.01 ) {
+
         bufferSource.stop( this.audioContext.currentTime );
-      
+
       }
 
       bufferSource.disconnect();
- 
+
       this.bufferSourceMap.delete( bufferSource );
 
     }
@@ -72,7 +72,7 @@ class AudioBufferPlayer {
   stopAll() {
 
     this.bufferSourceMap.forEach( function( bufferSource ) {
-      
+
       stop( bufferSource )
 
     } );

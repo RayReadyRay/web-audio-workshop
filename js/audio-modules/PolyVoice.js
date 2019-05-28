@@ -1,5 +1,5 @@
 class PolyVoice {
-  
+
   constructor( options ) {
 
     this.audioContext = options.audioContext;
@@ -11,7 +11,7 @@ class PolyVoice {
     this.voiceCount = options.voiceCount || 6;
 
     this.currentVoiceId = 0;
-    
+
     this.voiceMap = new Map();
 
     this.output = this.audioContext.createGain();
@@ -31,24 +31,24 @@ class PolyVoice {
 
   }
 
-  start( time = this.audioContext.currentTime, voiceId ){
+  start( value = this.audioContext.currentTime, voiceId ){
 
     //cycle through the voices
     this.currentVoiceId = voiceId || ( this.currentVoiceId + 1 ) % this.voiceCount;
-    
+
     this.currentVoice = this.voiceMap.get( this.currentVoiceId );
 
-    this.currentVoice.start( time );
+    this.currentVoice.start( value );
 
     return this.currentVoice;
 
   }
 
-  stop( time = this.audioContext.currentTime, voiceId ){
+  stop( value = this.audioContext.currentTime, voiceId ){
 
     let vId = voiceId || this.currentVoice
 
-    voiceMap.get( vId ).stop( time );
+    voiceMap.get( vId ).stop( value );
 
   }
 

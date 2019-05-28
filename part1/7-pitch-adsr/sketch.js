@@ -24,10 +24,6 @@ envelope.attack = 3;
 envelope.connect( masterGain.gain );
 
 
-const pitchEnvelope = new ADSREnvelope( { audioContext } );
-pitchEnvelope.attack = .2;
-pitchEnvelope.connect( oscillator.detune, 2400 );
-
 //setup musical scale and keyboard
 const musicalScale = new MusicalScale({ scale: "major", rootNote: "C4" });
 const keyboardKeyCount = 28;
@@ -57,17 +53,14 @@ function setup() {
 
 function mousePressed(){
 
-	envelope.start();
-	pitchEnvelope.start();
-
 	updateKeyboardKey();
 
+	envelope.start();
 }
 
 function mouseReleased() {
 
 	envelope.stop();
-	pitchEnvelope.stop();
 
 }
 

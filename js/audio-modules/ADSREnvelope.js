@@ -1,5 +1,5 @@
 class ADSREnvelope {
-    
+
   constructor( options ) {
 
     this.audioContext = options.audioContext;
@@ -25,12 +25,14 @@ class ADSREnvelope {
     this.paramMap.forEach( ( obj ) => {
 
       //pin value
+      var v = obj.param.value
       if( obj.param.cancelAndHoldAtTime )
         obj.param.cancelAndHoldAtTime( time );
       else
         obj.param.cancelScheduledValues( time );
+      obj.param.setValueAtTime( v, time );
 
-      obj.param.setValueAtTime( 0, time );
+      // obj.param.setValueAtTime( 0, time );
 
       //attack
       if( this.attack > 0 )
@@ -47,20 +49,22 @@ class ADSREnvelope {
 
     } );
 
-    
+
 
   }
 
   stop( time = this.audioContext.currentTime ) {
 
     this.paramMap.forEach( ( obj ) => {
-
-      //release
+      //pin value
+      var v = obj.param.value
       if( obj.param.cancelAndHoldAtTime )
         obj.param.cancelAndHoldAtTime( time );
       else
         obj.param.cancelScheduledValues( time );
-      
+      obj.param.setValueAtTime( v, time );
+
+      //release
       obj.param.linearRampToValueAtTime( 0.0, time + this.release );
 
     } );

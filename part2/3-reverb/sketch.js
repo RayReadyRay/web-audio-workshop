@@ -91,9 +91,9 @@ function setup() {
 
 function mousePressed(){
 
-	envelope.start();
-
 	updateKeyboardKey();
+
+	envelope.start();
 
 }
 

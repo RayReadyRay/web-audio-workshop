@@ -1,5 +1,5 @@
 class Voice {
-  
+
   constructor( options ) {
 
     this.audioContext = options.audioContext;
@@ -15,7 +15,7 @@ class Voice {
     this.envelope = new ADSREnvelope( { audioContext } );
     this.envelope.attack = 1;
     this.envelope.decay = 1;
-    this.envelope.sustain = .1;
+    this.envelope.sustain = 1;
     this.envelope.release = 1;
     this.envelope.connect( this.output.gain );
 
@@ -23,12 +23,12 @@ class Voice {
     this.filter = this.audioContext.createBiquadFilter();
     this.filter.type = "lowpass";
     this.filter.Q.setValueAtTime( 30, this.audioContext.currentTime);
-    this.filter.frequency.setValueAtTime( 2000, this.audioContext.currentTime);
+    this.filter.frequency.setValueAtTime( 4800, this.audioContext.currentTime);
     this.filter.connect( this.output );
 
     this.oscillator.connect( this.filter );
 
-    this.envelope.connect( this.filter.detune, -2400 );
+    this.envelope.connect( this.filter.frequency, 2400 );
 
     //listen for oscillator waveform selection
     const oscWaveformElement = document.querySelector( "#osc-waveform" );

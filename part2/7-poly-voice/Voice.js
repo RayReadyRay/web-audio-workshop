@@ -1,5 +1,5 @@
 class Voice {
-  
+
   constructor( options ) {
 
     this.audioContext = options.audioContext;
